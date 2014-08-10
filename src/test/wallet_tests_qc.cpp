@@ -11,15 +11,23 @@
 
 #include "cppqc.h"
 
+struct amount
+{
+    int a;
+};
+
+#define CPPQC_TEST_TYPE std::pair<int,int> 
+
+// CPPQC print helper
 namespace std {
-    std::ostream &operator<<(std::ostream &out, const std::vector<int> &v)
+    std::ostream &operator<<(std::ostream &out, const std::vector<CPPQC_TEST_TYPE> &v)
     {
         out << "[";
-        for (std::vector<int>::const_iterator it = v.begin(); it != v.end();
+        for (std::vector<CPPQC_TEST_TYPE>::const_iterator it = v.begin(); it != v.end();
                 ++it) {
             if (it != v.begin())
                 out << ", ";
-            out << *it;
+            printf("TODO");
         }
         out << "]";
         return out;
@@ -66,16 +74,16 @@ static bool equal_sets(CoinSet a, CoinSet b)
     return ret.first == a.end() && ret.second == b.end();
 }
 
-struct amount_and_age
-{
-    int64_t nAmount;
-    int     nAge;
-};
+// CPPQC
 
-struct PropCoinMaturity : cppqc::Property<std::vector<int> >
+// CPPQC types
+// TOOD: how to use structs with CPPQC?
+
+// CPPQC property
+struct PropCoinMaturity : cppqc::Property<std::vector<CPPQC_TEST_TYPE> >
 {
-    PropCoinMaturity() : Property(cppqc::listOf<int>()) {}
-    bool check(const std::vector<int> &a) const
+    PropCoinMaturity() : Property(cppqc::listOf<CPPQC_TEST_TYPE>()) {}
+    bool check(const std::vector<CPPQC_TEST_TYPE> &a) const
     {
         return true;
     }
@@ -83,16 +91,18 @@ struct PropCoinMaturity : cppqc::Property<std::vector<int> >
     {
         return "Test wallet.SelectCoinsMinConf with new and mature coins";
     }
-    std::string classify(const std::vector<int> &a) const
+    std::string classify(const std::vector<CPPQC_TEST_TYPE> &a) const
     {
         return "todo_classify";
     }
-    bool trivial(const std::vector<int> &a) const
+    bool trivial(const std::vector<CPPQC_TEST_TYPE> &a) const
     {
         // TODO
         return false;
     }
 };
+
+// END CPPQC
 
 BOOST_AUTO_TEST_CASE(coin_selection_tests)
 {
